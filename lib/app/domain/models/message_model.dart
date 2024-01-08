@@ -1,34 +1,40 @@
 class MessageModel {
   final String user;
-  final String timestamp;
+  final DateTime creationDate;
   final String content;
+  final String? id;
 
   MessageModel({
     required this.user,
-    required this.timestamp,
+    required this.creationDate,
     required this.content,
+    required this.id,
   });
 
   MessageModel copyWith({
     String? user,
-    String? timestamp,
+    DateTime? creationDate,
     String? content,
+    String? id,
   }) =>
       MessageModel(
         user: user ?? this.user,
-        timestamp: timestamp ?? this.timestamp,
+        creationDate: creationDate ?? this.creationDate,
         content: content ?? this.content,
+        id: id ?? this.id,
       );
 
   factory MessageModel.fromJson(Map<String, dynamic> json) => MessageModel(
         user: json["user"],
-        timestamp: json["timestamp"],
+        creationDate: DateTime.tryParse(json["creationDate"]) ?? DateTime.now(),
         content: json["content"],
+        id: json["id"],
       );
 
   Map<String, dynamic> toJson() => {
         "user": user,
-        "timestamp": timestamp,
+        "creationDate": creationDate.toIso8601String(),
         "content": content,
+        "id": id,
       };
 }

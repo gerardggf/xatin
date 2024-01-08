@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.xatin">
+    package="com.sanfaina.xatin">
    <application
         android:label="xatin"
         android:name="${applicationName}"

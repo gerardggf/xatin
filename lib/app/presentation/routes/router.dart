@@ -1,40 +1,22 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:xatin/app/domain/repositories/connectivity_repository.dart';
 import 'package:xatin/app/xatin_app.dart';
 import '../modules/home/home_view.dart';
 import '../modules/offline/offline_view.dart';
 import 'routes.dart';
 
-Future<String> getInitialRouteName(BuildContext context) async {
-  //TODO: adapt to my architecture
+Future<String> getInitialRouteName(BuildContext context, WidgetRef ref) async {
+  final hasInternet = ref.read(connectivityRepositoryProvider).hasInternet;
+
+  if (!hasInternet) {
+    return Routes.offline;
+  }
   return Routes.home;
-  // final SessionController sessionController = context.read();
-  // final FavoritesController favoritesController = context.read();
-
-  // final hasInternet = Repositories.connectivity.hasInternet;
-
-  // if (!hasInternet) {
-  //   return Routes.offline;
-  // }
-
-  // final isSignedIn = await Repositories.authentication.isSignedIn;
-
-  // if (!isSignedIn) {
-  //   return Routes.signIn;
-  // }
-
-  // final user = await Repositories.account.getUserData();
-
-  // if (user != null) {
-  //   sessionController.setUser(user);
-  //   favoritesController.init();
-  //   return Routes.home;
-  // }
-
-  // return Routes.signIn;
 }
 
-mixin RouterMixin on State<XatinApp> {
+mixin RouterMixin on ConsumerState<XatinApp> {
   GoRouter? _router;
   late String _initialRouteName;
 
@@ -104,7 +86,7 @@ mixin RouterMixin on State<XatinApp> {
   }
 
   Future<void> _init() async {
-    _initialRouteName = await getInitialRouteName(context);
+    _initialRouteName = await getInitialRouteName(context, ref);
     setState(() {
       _loading = false;
     });

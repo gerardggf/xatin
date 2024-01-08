@@ -48,4 +48,4 @@ app.*.map.json
 *.g.dart
 *.freezed.dart
 *.mocks.dart
-lib/app/generated/
+lib/app/core/generated/

@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xatin/app/xatin_app.dart';
-import 'package:xatin/generated/translations.g.dart';
+import 'app/core/generated/translations.g.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,8 +13,6 @@ void main() async {
     const Root(),
   );
 }
-
-//TODO: add slang.yaml
 
 class Root extends StatelessWidget {
   const Root({super.key});
@@ -29,5 +27,3 @@ class Root extends StatelessWidget {
     );
   }
 }
-
-//TODO: add slang.yaml

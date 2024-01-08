@@ -1,4 +1,4 @@
-package com.example.xatin
+package com.sanfaina.xatin
 
 import io.flutter.embedding.android.FlutterActivity
 

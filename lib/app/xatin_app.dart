@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:xatin/app/presentation/routes/router.dart';
-import 'package:xatin/generated/translations.g.dart';
-
+import 'core/generated/translations.g.dart';
 import 'presentation/splash_view.dart';
 
-class XatinApp extends StatefulWidget {
+class XatinApp extends ConsumerStatefulWidget {
   const XatinApp({
     super.key,
     this.initialRoute,
@@ -17,10 +17,10 @@ class XatinApp extends StatefulWidget {
   final List<GoRoute>? overrideRoutes;
 
   @override
-  State<XatinApp> createState() => _XatinAppState();
+  ConsumerState<XatinApp> createState() => _XatinAppState();
 }
 
-class _XatinAppState extends State<XatinApp>
+class _XatinAppState extends ConsumerState<XatinApp>
     with RouterMixin, WidgetsBindingObserver {
   @override
   void initState() {
