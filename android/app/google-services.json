@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "616303858829",
+    "project_id": "xatin-fbb71",
+    "storage_bucket": "xatin-fbb71.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:616303858829:android:ca2ad38ec08a4e272cfec4",
+        "android_client_info": {
+          "package_name": "com.sanfaina.xatin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxxXMiUdrEFU7u7ywNWKQ0kCQ8rR02LW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

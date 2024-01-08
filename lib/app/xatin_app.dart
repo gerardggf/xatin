@@ -59,6 +59,7 @@ class _XatinAppState extends ConsumerState<XatinApp>
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         routerConfig: router,
         localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,

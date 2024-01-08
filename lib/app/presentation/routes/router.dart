@@ -2,13 +2,16 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:xatin/app/domain/repositories/connectivity_repository.dart';
+import 'package:xatin/app/presentation/modules/room/room_view.dart';
 import 'package:xatin/app/xatin_app.dart';
 import '../modules/home/home_view.dart';
 import '../modules/offline/offline_view.dart';
 import 'routes.dart';
 
 Future<String> getInitialRouteName(BuildContext context, WidgetRef ref) async {
-  final hasInternet = ref.read(connectivityRepositoryProvider).hasInternet;
+  final connectivityRepository = ref.read(connectivityRepositoryProvider);
+  await connectivityRepository.initialize();
+  final hasInternet = connectivityRepository.hasInternet;
 
   if (!hasInternet) {
     return Routes.offline;
@@ -33,6 +36,15 @@ mixin RouterMixin on ConsumerState<XatinApp> {
         name: Routes.home,
         path: '/',
         builder: (_, __) => const HomeView(),
+      ),
+      GoRoute(
+        name: Routes.room,
+        path: '/room/:roomId',
+        builder: (_, state) {
+          print(state.pathParameters);
+          final roomId = state.pathParameters['name'] ?? '';
+          return RoomView(roomId: roomId);
+        },
       ),
       GoRoute(
         name: Routes.offline,

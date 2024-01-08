@@ -45,7 +45,7 @@ class ChatsRepositoryImpl implements ChatsRepository {
       final collection = firestore.collection(FirestoreCollections.rooms);
       final newRoomDoc = await collection.add(
         RoomModel(
-          name: '',
+          name: roomName,
           creationDate: DateTime.now(),
           id: '',
           users: [],
