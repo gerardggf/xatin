@@ -16,4 +16,5 @@ abstract class ChatsRepository {
   Stream<List<RoomModel>> subscribeToRoomsList();
   Future<bool> sendMessage(String roomId, MessageModel message);
   Future<bool> createRoom(String roomName);
+  Future<bool> deleteRoom(String roomId);
 }

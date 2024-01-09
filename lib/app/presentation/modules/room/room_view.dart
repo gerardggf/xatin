@@ -34,25 +34,15 @@ class _RoomViewState extends ConsumerState<RoomView> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        leading: const BackButton(color: Colors.black),
         title: const Text(
-          'xatin',
+          'Chat',
           style: TextStyle(
             color: Colors.black,
           ),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              ref.read(chatsRepositoryProvider).createRoom('prueba');
-            },
-            icon: const Icon(
-              Icons.add,
-              color: Colors.black,
-            ),
-          ),
-        ],
       ),
       body: roomMessagesStream.when(
         data: (messages) {
@@ -64,7 +54,23 @@ class _RoomViewState extends ConsumerState<RoomView> {
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
                     final message = messages[index];
-                    return MessageWidget(message: message);
+                    if (message.id == 'init') {
+                      return Container(
+                        margin: const EdgeInsets.all(3),
+                        child: Text(
+                          message.content,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      );
+                    }
+                    return MessageWidget(
+                      message: message,
+                      //TODO: add users
+                      isMine: message.user == 'prueba',
+                    );
                   },
                 ),
               ),
@@ -78,7 +84,7 @@ class _RoomViewState extends ConsumerState<RoomView> {
                         child: TextField(
                           controller: _textController,
                           decoration: const InputDecoration(
-                            hintText: 'Write message',
+                            hintText: 'Write message…',
                             border: InputBorder.none,
                           ),
                         ),
@@ -89,12 +95,13 @@ class _RoomViewState extends ConsumerState<RoomView> {
                         ref.read(chatsRepositoryProvider).sendMessage(
                               widget.roomId,
                               MessageModel(
-                                user: 'prueba',
+                                user: 'antonio',
                                 creationDate: DateTime.now(),
                                 content: _textController.text,
                                 id: '',
                               ),
                             );
+                        _textController.text = '';
                       },
                       icon: const Icon(Icons.send),
                     ),

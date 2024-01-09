@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:xatin/app/domain/repositories/chats_repository.dart';
 import 'package:xatin/app/presentation/global/widgets/error_loading_widget.dart';
 import 'package:xatin/app/presentation/global/widgets/loading_widget.dart';
@@ -34,8 +35,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
         elevation: 0,
         actions: [
           IconButton(
-            onPressed: () {
-              ref.read(chatsRepositoryProvider).createRoom('prueba');
+            onPressed: () async {
+              await _buildCreateRoomDialog();
             },
             icon: const Icon(
               Icons.add,
@@ -61,6 +62,41 @@ class _HomeViewState extends ConsumerState<HomeView> {
         ),
         loading: () => const LoadingWidget(),
       ),
+    );
+  }
+
+  _buildCreateRoomDialog() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        String text = '';
+        return AlertDialog(
+          title: const Text('Create room'),
+          content: TextField(
+            decoration: const InputDecoration(
+              hintText: "Room's name",
+            ),
+            onChanged: (value) {
+              text = value;
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                ref.read(chatsRepositoryProvider).createRoom(text);
+                context.pop();
+              },
+              child: const Text('Confirmar'),
+            ),
+            TextButton(
+              onPressed: () {
+                context.pop();
+              },
+              child: const Text('Cancelar'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

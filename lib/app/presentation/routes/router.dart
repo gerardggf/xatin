@@ -41,8 +41,7 @@ mixin RouterMixin on ConsumerState<XatinApp> {
         name: Routes.room,
         path: '/room/:roomId',
         builder: (_, state) {
-          print(state.pathParameters);
-          final roomId = state.pathParameters['name'] ?? '';
+          final roomId = state.pathParameters['roomId'] ?? '';
           return RoomView(roomId: roomId);
         },
       ),

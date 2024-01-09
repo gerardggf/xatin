@@ -51,6 +51,17 @@ class ChatsRepositoryImpl implements ChatsRepository {
           users: [],
         ).toJson(),
       );
+      await newRoomDoc
+          .collection(FirestoreCollections.messages)
+          .doc('init')
+          .set(
+            MessageModel(
+              user: '',
+              creationDate: DateTime.now(),
+              content: roomName,
+              id: 'init',
+            ).toJson(),
+          );
       await collection.doc(newRoomDoc.id).update(
         {"id": newRoomDoc.id},
       );
@@ -66,13 +77,30 @@ class ChatsRepositoryImpl implements ChatsRepository {
   }
 
   @override
+  Future<bool> deleteRoom(String roomId) async {
+    try {
+      final collection = firestore.collection(FirestoreCollections.rooms);
+      await collection.doc(roomId).delete();
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        print(
+          e.toString(),
+        );
+      }
+      return false;
+    }
+  }
+
+  @override
   Stream<List<MessageModel>> subscribeToRoom(String roomId) async* {
+    _room = roomId;
     try {
       final collection = firestore
           .collection(FirestoreCollections.rooms)
-          .doc(room)
+          .doc(roomId)
           .collection(FirestoreCollections.messages);
-      yield* collection.snapshots().map(
+      yield* collection.orderBy('creationDate').snapshots().map(
             (e) => e.docs.map(
               (e) {
                 return MessageModel.fromJson(e.data());

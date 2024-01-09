@@ -16,6 +16,7 @@ class RoomTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
+        print(room.id);
         context.pushNamed(Routes.room, pathParameters: {
           "roomId": room.id ?? '',
         });
@@ -34,7 +35,7 @@ class RoomTileWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            DateFormat('hh:mm').format(room.creationDate),
+            DateFormat('HH:mm').format(room.creationDate),
           ),
           Text(
             DateFormat('dd/MM/yyyy').format(room.creationDate),
