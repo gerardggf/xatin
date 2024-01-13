@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:xatin/app/core/const/colors.dart';
 import 'package:xatin/app/domain/models/message_model.dart';
 import 'package:xatin/app/presentation/global/mixins/num_sizedbox_extension.dart';
 import 'package:xatin/app/presentation/global/utils/map_datetimes.dart';
@@ -31,8 +32,7 @@ class MessageWidget extends StatelessWidget {
             vertical: 10,
           ),
           decoration: BoxDecoration(
-            color:
-                isMine ? Colors.black : const Color.fromARGB(255, 46, 121, 49),
+            color: isMine ? AppColors.primary : AppColors.secondary,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Column(
@@ -40,7 +40,9 @@ class MessageWidget extends StatelessWidget {
                 isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: [
               Text(
-                message.user,
+                message.user.length > 10
+                    ? '${message.user.substring(0, 10)}...'
+                    : message.user,
                 textAlign: isMine ? TextAlign.end : TextAlign.start,
                 style: const TextStyle(
                   color: Colors.white,

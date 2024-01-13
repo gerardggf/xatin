@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:xatin/app/domain/models/room_model.dart';
 import 'package:xatin/app/presentation/routes/routes.dart';
 
+import '../../../../core/const/colors.dart';
+
 class RoomTileWidget extends StatelessWidget {
   const RoomTileWidget({
     super.key,
@@ -16,7 +18,6 @@ class RoomTileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () {
-        print(room.id);
         context.pushNamed(Routes.room, pathParameters: {
           "roomId": room.id ?? '',
         });
@@ -26,7 +27,9 @@ class RoomTileWidget extends StatelessWidget {
       ),
       title: Text(
         room.name,
-        style: const TextStyle(color: Colors.black),
+        style: const TextStyle(
+          color: AppColors.primary,
+        ),
       ),
       subtitle: Text(
         room.users.length.toString(),

@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:xatin/app/domain/repositories/chats_repository.dart';
+import 'package:xatin/app/presentation/global/utils/show_custom_snack_bar.dart';
 import 'package:xatin/app/presentation/global/widgets/error_loading_widget.dart';
 import 'package:xatin/app/presentation/global/widgets/loading_widget.dart';
 import 'package:xatin/app/presentation/global/widgets/no_rooms_widget.dart';
+import 'package:xatin/app/presentation/modules/home/home_controller.dart';
 import 'package:xatin/app/presentation/modules/home/widgets/room_tile_widget.dart';
+
+import '../../../core/const/colors.dart';
 
 final roomsListStreamProvider = StreamProvider(
   (ref) => ref.watch(chatsRepositoryProvider).subscribeToRoomsList(),
@@ -22,25 +26,47 @@ class _HomeViewState extends ConsumerState<HomeView> {
   @override
   Widget build(BuildContext context) {
     final roomsListStream = ref.watch(roomsListStreamProvider);
+    final notifier = ref.read(homeControllerProvider.notifier);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text(
           'xatin',
           style: TextStyle(
-            color: Colors.black,
+            color: AppColors.primary,
           ),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
         actions: [
+          PopupMenuButton(
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  child: const Text('Sign out'),
+                  onTap: () async {
+                    await notifier.signOut();
+                    if (!mounted) return;
+                    showCustomSnackBar(
+                      context,
+                      'User signed out',
+                    );
+                  },
+                ),
+              ];
+            },
+            icon: const Icon(
+              Icons.more_horiz,
+              color: AppColors.primary,
+            ),
+          ),
           IconButton(
             onPressed: () async {
               await _buildCreateRoomDialog();
             },
             icon: const Icon(
               Icons.add,
-              color: Colors.black,
+              color: AppColors.primary,
             ),
           ),
         ],
@@ -57,7 +83,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
             },
           );
         },
-        error: (e, __) => ErrorLoadigWidget(
+        error: (e, __) => ErrorLoadingWidget(
           errorMessage: e.toString(),
         ),
         loading: () => const LoadingWidget(),

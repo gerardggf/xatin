@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ErrorLoadigWidget extends StatelessWidget {
-  const ErrorLoadigWidget({
+class ErrorLoadingWidget extends StatelessWidget {
+  const ErrorLoadingWidget({
     super.key,
     required this.errorMessage,
   });

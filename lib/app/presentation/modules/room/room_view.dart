@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xatin/app/domain/models/message_model.dart';
+import 'package:xatin/app/domain/repositories/authentiation_repository.dart';
 import 'package:xatin/app/domain/repositories/chats_repository.dart';
 import 'package:xatin/app/presentation/global/widgets/error_loading_widget.dart';
 import 'package:xatin/app/presentation/global/widgets/loading_widget.dart';
 import 'package:xatin/app/presentation/modules/room/widgets/message_widget.dart';
+
+import '../../../core/const/colors.dart';
 
 final roomMessagesStreamProvider =
     StreamProvider.family.autoDispose<List<MessageModel>, String>(
@@ -25,20 +28,24 @@ class RoomView extends ConsumerStatefulWidget {
 
 class _RoomViewState extends ConsumerState<RoomView> {
   final TextEditingController _textController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
     final roomMessagesStream = ref.watch(
       roomMessagesStreamProvider(widget.roomId),
     );
+    final user = ref.watch(authenticationRepositoryProvider).user;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: const BackButton(color: Colors.black),
+        leading: const BackButton(
+          color: AppColors.primary,
+        ),
         title: const Text(
           'Chat',
           style: TextStyle(
-            color: Colors.black,
+            color: AppColors.primary,
           ),
         ),
         backgroundColor: Colors.white,
@@ -50,6 +57,7 @@ class _RoomViewState extends ConsumerState<RoomView> {
             children: [
               Expanded(
                 child: ListView.builder(
+                  controller: _scrollController,
                   itemCount: messages.length,
                   physics: const BouncingScrollPhysics(),
                   itemBuilder: (context, index) {
@@ -68,8 +76,7 @@ class _RoomViewState extends ConsumerState<RoomView> {
                     }
                     return MessageWidget(
                       message: message,
-                      //TODO: add users
-                      isMine: message.user == 'prueba',
+                      isMine: message.user == user?.uid,
                     );
                   },
                 ),
@@ -91,17 +98,18 @@ class _RoomViewState extends ConsumerState<RoomView> {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {
-                        ref.read(chatsRepositoryProvider).sendMessage(
+                      onPressed: () async {
+                        await ref.read(chatsRepositoryProvider).sendMessage(
                               widget.roomId,
                               MessageModel(
-                                user: 'antonio',
+                                user: user?.uid ?? '',
                                 creationDate: DateTime.now(),
                                 content: _textController.text,
                                 id: '',
                               ),
                             );
                         _textController.text = '';
+                        await _scrollToBottom();
                       },
                       icon: const Icon(Icons.send),
                     ),
@@ -111,11 +119,19 @@ class _RoomViewState extends ConsumerState<RoomView> {
             ],
           );
         },
-        error: (e, __) => ErrorLoadigWidget(
+        error: (e, __) => ErrorLoadingWidget(
           errorMessage: e.toString(),
         ),
         loading: () => const LoadingWidget(),
       ),
+    );
+  }
+
+  Future<void> _scrollToBottom() async {
+    await _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeOut,
     );
   }
 }

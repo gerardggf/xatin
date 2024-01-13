@@ -2,21 +2,26 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:xatin/app/domain/repositories/connectivity_repository.dart';
+import 'package:xatin/app/presentation/modules/auth/auth_view.dart';
+import 'package:xatin/app/presentation/modules/auth/change_password/change_password_view.dart';
+import 'package:xatin/app/presentation/modules/auth/sign_in/sign_in_view.dart';
 import 'package:xatin/app/presentation/modules/room/room_view.dart';
 import 'package:xatin/app/xatin_app.dart';
+import '../modules/auth/register/register_view.dart';
 import '../modules/home/home_view.dart';
 import '../modules/offline/offline_view.dart';
 import 'routes.dart';
 
 Future<String> getInitialRouteName(BuildContext context, WidgetRef ref) async {
   final connectivityRepository = ref.read(connectivityRepositoryProvider);
+
   await connectivityRepository.initialize();
   final hasInternet = connectivityRepository.hasInternet;
 
   if (!hasInternet) {
     return Routes.offline;
   }
-  return Routes.home;
+  return Routes.auth;
 }
 
 mixin RouterMixin on ConsumerState<XatinApp> {
@@ -49,6 +54,26 @@ mixin RouterMixin on ConsumerState<XatinApp> {
         name: Routes.offline,
         path: '/offline',
         builder: (_, __) => const OfflineView(),
+      ),
+      GoRoute(
+        name: Routes.signIn,
+        path: '/sign-in',
+        builder: (_, __) => const SignInView(),
+      ),
+      GoRoute(
+        name: Routes.register,
+        path: '/register',
+        builder: (_, __) => const RegisterView(),
+      ),
+      GoRoute(
+        name: Routes.changePassword,
+        path: '/change-password',
+        builder: (_, __) => const ChangePasswordView(),
+      ),
+      GoRoute(
+        name: Routes.auth,
+        path: '/auth',
+        builder: (_, __) => const AuthView(),
       ),
     ];
 
