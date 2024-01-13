@@ -35,7 +35,7 @@ class _RoomViewState extends ConsumerState<RoomView> {
     final roomMessagesStream = ref.watch(
       roomMessagesStreamProvider(widget.roomId),
     );
-    final user = ref.watch(authenticationRepositoryProvider).user;
+    final user = ref.watch(authenticationRepositoryProvider).firebaseUser;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(

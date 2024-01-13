@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:xatin/app/core/const/colors.dart';
 import 'package:xatin/app/domain/models/message_model.dart';
 import 'package:xatin/app/presentation/global/mixins/num_sizedbox_extension.dart';
 import 'package:xatin/app/presentation/global/utils/map_datetimes.dart';
 
-class MessageWidget extends StatelessWidget {
+class MessageWidget extends ConsumerWidget {
   const MessageWidget({
     super.key,
     required this.message,
@@ -16,17 +17,27 @@ class MessageWidget extends StatelessWidget {
   final bool isMine;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       crossAxisAlignment:
           isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [
         Container(
           margin: isMine
-              ? const EdgeInsets.only(right: 12, top: 5)
-                  .copyWith(left: 30, bottom: 2)
-              : const EdgeInsets.only(left: 12, top: 5)
-                  .copyWith(right: 30, bottom: 2),
+              ? const EdgeInsets.only(
+                  right: 12,
+                  top: 5,
+                ).copyWith(
+                  left: 30,
+                  bottom: 2,
+                )
+              : const EdgeInsets.only(
+                  left: 12,
+                  top: 5,
+                ).copyWith(
+                  right: 30,
+                  bottom: 2,
+                ),
           padding: const EdgeInsets.symmetric(
             horizontal: 15,
             vertical: 10,
@@ -40,10 +51,10 @@ class MessageWidget extends StatelessWidget {
                 isMine ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: [
               Text(
-                message.user.length > 10
-                    ? '${message.user.substring(0, 10)}...'
-                    : message.user,
+                message.user,
                 textAlign: isMine ? TextAlign.end : TextAlign.start,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,

@@ -97,6 +97,9 @@ class _HomeViewState extends ConsumerState<HomeView> {
       builder: (context) {
         String text = '';
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: const Text('Create room'),
           content: TextField(
             decoration: const InputDecoration(

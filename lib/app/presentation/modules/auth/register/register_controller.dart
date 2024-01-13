@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xatin/app/core/either/either.dart';
+import 'package:xatin/app/domain/models/user_model.dart';
 import 'package:xatin/app/domain/repositories/authentiation_repository.dart';
 
 import 'state/register_state.dart';
@@ -33,7 +34,7 @@ class RegisterController extends StateNotifier<RegisterState> {
     state = state.copyWith(password: value);
   }
 
-  Future<Either<FirebaseException, User?>> submit() async {
+  Future<Either<FirebaseException, UserModel?>> submit() async {
     updateFetching(true);
     final result = await authenticationRepository.register(
       state.email,
